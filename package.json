@@ -1,0 +1,28 @@
+{
+  "name": "bookmarklet",
+  "version": "1.0.0",
+  "description": "index.jsをブックマークで初回読み込みをするため、index.jsに直接処理を記述するか別ファイルを用意し取り込むようにする。",
+  "main": "index.js",
+  "scripts": {
+    "test": "test",
+    "webpack": "webpack --watch"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Taiki-nk/Bookmarklet.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Taiki-nk/Bookmarklet/issues"
+  },
+  "homepage": "https://github.com/Taiki-nk/Bookmarklet#readme",
+  "devDependencies": {
+    "axios": "^0.26.0",
+    "babel-core": "^6.26.3",
+    "babel-loader": "^8.2.3",
+    "babel-preset-env": "^1.7.0",
+    "webpack": "^5.69.1",
+    "webpack-cli": "^4.9.2"
+  }
+}
