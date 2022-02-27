@@ -6,45 +6,62 @@ header( 'Access-Control-Allow-Origin: *' );
 class DB_control {
 
 	public function __construct(){
-		if(file_exists('../db/mitene.sqlite')){
-			echo 'あるよ';
-		} else {
-			echo 'ないよ';
+		if(!file_exists('../db/mitene.sqlite')){
 			exec('touch ../db/mitene.sqlite');
 			$this->create_table();
-
 		}
 
-		try{
-			$this->db = new PDO('sqlite:../db/mitene.sqlite');
+		// POST送信があった場合
+		if(!empty($_POST)){
+			// DB更新用
+			if(isset($_POST['exec']) && $_POST['exec'] === 'insert'){
+				$this->insert_data($_POST['code']);
+				echo '更新完了';
+				exit();
+			}
 
+			// DBにデータがない
+			if(!$this->get_data()){
+				// $this->insert_data($_POST['code']);
+				echo $_POST['code'];
+				exit();
+			}
+
+			// 差分がある
+			$diff = array_diff(json_decode($_POST['code']), json_decode($this->get_data()));
+			if(count($diff)){
+				echo json_encode($diff);
+				exit();
+			}
+
+		} 
+	}
+
+	public function set_pdo(){
+		try{
+			return new PDO('sqlite:../db/mitene.sqlite');
 		}catch(Exception $e){
 			echo 'DB接続に失敗しました。';
 			exit();
 		}
-
-		if(!empty($_POST)){
-			echo $this->get_data();
-			$this->insert_data($_POST['code']);
-		} 
 	}
 
 	public function create_table(){
-		$db = $this->db;
-		$db->query('CREATE TABLE codes (id INTEGER PRIMARY KEY AUTOINCREMENT, code text NOT NULL);');
+		$db = $this->set_pdo();
+		$db->exec('CREATE TABLE codes (id INTEGER PRIMARY KEY AUTOINCREMENT, code TEXT NOT NULL);');
 	}
 
 	public function get_data(){
-		$db = $this->db;
+		$db = $this->set_pdo();
 
-		$result = $db->query('select name from users;');
-		return $result->fetchAll(PDO::FETCH_ASSOC);
+		$result = $db->query('select * from codes where id = (select max(id) from codes LIMIT 1);');
+		return $result->fetch(PDO::FETCH_ASSOC)['code'];
 	}
 
-	public function insert_data($name){
-		$db = $this->db;
-		$stmt = $db->prepare('INSERT INTO users (name) values (:name)');
-		$stmt->bindParam(':name', $name, PDO::PARAM_STR);
+	public function insert_data($code){
+		$db = $this->set_pdo();
+		$stmt = $db->prepare('INSERT INTO codes (code) values (:code)');
+		$stmt->bindParam(':code', $code, PDO::PARAM_STR);
 		$stmt->execute();
 		return 'DB更新完了';
 	}
