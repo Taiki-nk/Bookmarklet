@@ -6,6 +6,7 @@ header( 'Access-Control-Allow-Origin: *' );
 class DB_control {
 
 	public function __construct(){
+		// sqlite作成
 		if(!file_exists('../db/mitene.sqlite')){
 			exec('touch ../db/mitene.sqlite');
 			$this->create_table();
@@ -22,7 +23,6 @@ class DB_control {
 
 			// DBにデータがない
 			if(!$this->get_data()){
-				// $this->insert_data($_POST['code']);
 				echo $_POST['code'];
 				exit();
 			}
@@ -37,6 +37,7 @@ class DB_control {
 		} 
 	}
 
+	//DB接続
 	public function set_pdo(){
 		try{
 			return new PDO('sqlite:../db/mitene.sqlite');
@@ -46,18 +47,20 @@ class DB_control {
 		}
 	}
 
+	// テーブル作成
 	public function create_table(){
 		$db = $this->set_pdo();
 		$db->exec('CREATE TABLE codes (id INTEGER PRIMARY KEY AUTOINCREMENT, code TEXT NOT NULL);');
 	}
 
+	// 最新レコード取得
 	public function get_data(){
 		$db = $this->set_pdo();
-
-		$result = $db->query('select * from codes where id = (select max(id) from codes LIMIT 1);');
-		return $result->fetch(PDO::FETCH_ASSOC)['code'];
+		$result = $db->query('select code from codes where id = (select max(id) from codes LIMIT 1);');
+		return $result->fetch(PDO::FETCH_ASSOC);
 	}
 
+	// 全メディアコードDB保存
 	public function insert_data($code){
 		$db = $this->set_pdo();
 		$stmt = $db->prepare('INSERT INTO codes (code) values (:code)');
@@ -65,7 +68,6 @@ class DB_control {
 		$stmt->execute();
 		return 'DB更新完了';
 	}
-
 	
 }
 

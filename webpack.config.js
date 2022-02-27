@@ -1,5 +1,4 @@
 const path = require('path')
-// const webpack = require('webpack')
 
 module.exports = {
   entry: {
@@ -10,8 +9,6 @@ module.exports = {
     filename: 'index.js'
 	},
 	mode: 'development',
-  // devtool: 'cheap-module-eval-source-map',
-  // target: 'node',
   module: {
     rules: [
       {
@@ -20,7 +17,4 @@ module.exports = {
       }
     ]
   },
-  // plugins: [
-  //   externalPlugins
-  // ]
 }
