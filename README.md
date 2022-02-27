@@ -1,6 +1,6 @@
-# Bookmarklet
+# bookmarklet
 
-個人用Bookmarklet
+個人用bookmarklet
 ローカルにサーバーをたてて使うことを想定しているが、本番サーバーでも利用可能
 
 超個人用のため他者が使うことは想定していない簡易な作りだが、一応他者も使用可能。
@@ -10,7 +10,7 @@
 ### localhostの場合
 以下のコードをブラウザのブックマークに登録
 ```
-javascript:var script = document.createElement("script"); script.src = "http://localhost/Bookmarklet/dist/index.js"; document.body.appendChild(script);
+javascript:var script = document.createElement("script"); script.src = "http://localhost/bookmarklet/dist/index.js"; document.body.appendChild(script);
 ```
 
 localhostの直下にこのリポジトリをgit cloneする。
