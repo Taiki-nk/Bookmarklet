@@ -17,7 +17,7 @@ class DB_control {
 			// DB更新用
 			if(isset($_POST['exec']) && $_POST['exec'] === 'insert'){
 				$this->insert_data($_POST['code']);
-				echo '更新完了';
+				echo 'DB更新完了';
 				exit();
 			}
 
@@ -57,7 +57,7 @@ class DB_control {
 	public function get_data(){
 		$db = $this->set_pdo();
 		$result = $db->query('select code from codes where id = (select max(id) from codes LIMIT 1);');
-		return $result->fetch(PDO::FETCH_ASSOC);
+		return $result->fetch(PDO::FETCH_BOTH)[0];
 	}
 
 	// 全メディアコードDB保存
